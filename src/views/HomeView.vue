@@ -36,6 +36,10 @@ const filteredSpecialisations = computed(() => {
 
     console.log('s', s);
 
+    if (!specialisations.value) {
+        return [];
+    }
+
     return specialisations.value
         .filter((specialisation) => typeof specialisation.fields['Nom'] !== 'undefined')
         .filter((specialisation) =>
@@ -84,52 +88,83 @@ const getUsernameById = (id) => {
 const getSpecialisationDescription = (text) => {
     return text.replace(/\n/g, '<br />');
 };
+
+const handleResetFilters = () => {
+    selectedType.value = '';
+    selectedMember.value = '';
+    searchValue.value = '';
+};
 </script>
 
 <template>
     <!-- <pre>{{ specialisations }}</pre> -->
-    <main class="max-w-4xl mx-auto my-6">
-        <h2 class="text-4xl font-semibold text-secondary mb-4">Mimétiques</h2>
-        <h3 class="text-3xl font-semibold text-primary mb-4">
-            Spécialisations
-            <small v-if="specialisations"
-                >({{ filteredSpecialisations.length }}/{{ specialisations.length }})</small
+    <main class="">
+        <header
+            class="sticky top-0 px-2 min-[1315px]:pl-16 min-[1315px]:pr-4 h-auto py-2 min-[1315px]:h-12 overflow-hidden border-b border-neutral bg-base-100 flex gap-4 min-[1315px]:items-center flex-col min-[1315px]:flex-row"
+        >
+            <div
+                class="flex items-baseline gap-2 text-xl font-semibold min-w-[25rem] max-[1315px]:pl-14"
             >
-        </h3>
-
-        <div class="flex gap-2 my-4">
-            <input
-                type="text"
-                class="input input-bordered input-sm flex-1"
-                placeholder="Chercher..."
-                v-model="searchValue"
-            />
-            <div class="flex items-center">
-                <div class="badge badge-primary h-full">Type</div>
-                <select
-                    class="select select-bordered select-sm select-primary"
-                    v-model="selectedType"
-                >
-                    <option value="">---</option>
-                    <option v-for="t in types" :key="t.id">{{ t }}</option>
-                </select>
+                <h2 class="text-secondary">Mimétiques</h2>
+                /
+                <h3 class="text-primary">
+                    Spécialisations
+                    <small v-if="specialisations"
+                        >({{ filteredSpecialisations.length }}/{{ specialisations.length }})</small
+                    >
+                </h3>
             </div>
-            <div class="flex items-center">
-                <div class="badge badge-secondary h-full">Membre</div>
-                <select
-                    class="select select-bordered select-sm select-secondary"
-                    v-model="selectedMember"
+            <div class="flex flex-1 gap-2 flex-col min-[840px]:flex-row">
+                <input
+                    type="text"
+                    class="input input-bordered input-sm flex-1"
+                    placeholder="Chercher..."
+                    v-model="searchValue"
+                />
+                <div class="flex items-center">
+                    <div class="badge badge-primary h-8">Type</div>
+                    <select
+                        class="select select-bordered select-sm select-primary max-[840px]:flex-1"
+                        v-model="selectedType"
+                    >
+                        <option value="">---</option>
+                        <option v-for="t in types" :key="t.id">{{ t }}</option>
+                    </select>
+                </div>
+                <div class="flex items-center">
+                    <div class="badge badge-secondary h-8">Membre</div>
+                    <select
+                        class="select select-bordered select-sm select-secondary max-[840px]:flex-1"
+                        v-model="selectedMember"
+                    >
+                        <option value="">---</option>
+                        <option value="any">N'importe</option>
+                        <option v-for="member in members" :key="member.id" :value="member.id">
+                            {{ member.fields['Nom'] }}
+                        </option>
+                    </select>
+                </div>
+                <button
+                    class="btn btn-ghost min-[840px]:btn-square btn-sm"
+                    @click="handleResetFilters"
+                    v-show="searchValue || selectedType || selectedMember"
                 >
-                    <option value="">---</option>
-                    <option value="any">N'importe</option>
-                    <option v-for="member in members" :key="member.id" :value="member.id">
-                        {{ member.fields['Nom'] }}
-                    </option>
-                </select>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        class="size-5"
+                    >
+                        <path
+                            d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"
+                        />
+                    </svg>
+                    <span class="hidden max-[840px]:inline">Réinitialiser les filtres</span>
+                </button>
             </div>
-        </div>
+        </header>
 
-        <ul v-if="specialisations" class="flex gap-4 flex-col">
+        <ul v-if="specialisations" class="flex gap-4 flex-col max-w-4xl mx-auto my-6">
             <li
                 v-for="specialisation in filteredSpecialisations"
                 :key="specialisation.id"
@@ -176,5 +211,11 @@ const getSpecialisationDescription = (text) => {
                 </div>
             </li>
         </ul>
+        <div
+            v-if="specialisations && filteredSpecialisations.length === 0"
+            class="flex gap-4 flex-col max-w-4xl mx-auto my-6"
+        >
+            <div class="text-center text-lg">Aucun résultat trouvé...</div>
+        </div>
     </main>
 </template>
