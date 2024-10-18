@@ -74,11 +74,15 @@ const types = computed(() => {
                 })
                 .filter((spec) => spec),
         ),
-    ];
+    ].sort((a, b) => a.localeCompare(b));
 });
 
 const getUsernameById = (id) => {
     return members.value?.find((member) => member.id === id)?.fields['Nom'] ?? id;
+};
+
+const getSpecialisationDescription = (text) => {
+    return text.replace(/\n/g, '<br />');
 };
 </script>
 
@@ -155,9 +159,9 @@ const getUsernameById = (id) => {
 
                         {{ specialisation.fields['Nom'] }}
                     </div>
-                    <div>
-                        {{ specialisation.fields['Description'] }}
-                    </div>
+                    <div
+                        v-html="getSpecialisationDescription(specialisation.fields['Description'])"
+                    ></div>
                     <div class="flex flex-wrap gap-2 my-1">
                         <span class="badge badge-primary" v-if="specialisation.fields['Type']">
                             {{ specialisation.fields['Type'] }}
