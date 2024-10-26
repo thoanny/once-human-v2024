@@ -142,8 +142,8 @@ const handleFavorite = (id) => {
     if (idx >= 0) {
         favorites.splice(idx, 1);
     } else {
-        if (favorites.length >= 6) {
-            return alert("Impossible d'ajouter plus de 6 spécialisations en favoris...");
+        if (favorites.length >= 10) {
+            return alert("Impossible d'ajouter plus de 10 spécialisations en favoris...");
         }
         favorites.push(id);
     }
