@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from 'vue-router';
 <template>
     <header>
         <div class="wrapper">
-            <div class="dropdown fixed z-10 top-0">
+            <div class="dropdown fixed z-30 top-0">
                 <div tabindex="0" role="button" class="btn btn-neutral btn-square">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@ import { RouterLink, RouterView } from 'vue-router';
                         />
                     </svg>
                 </div>
-                <ul tabindex="0" class="dropdown-content menu bg-base-300 z-[1] w-52 p-2">
+                <ul tabindex="0" class="dropdown-content menu bg-base-300 z-40 w-52 p-2">
                     <li><RouterLink to="/">Home</RouterLink></li>
                     <li><RouterLink to="/about">About</RouterLink></li>
                 </ul>
