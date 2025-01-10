@@ -11,13 +11,13 @@ const onlyFavorites = ref(false);
 const isSharedUrl = ref(false);
 
 const getSpecialisations = async () => {
-    return await fetch('https://api.thoanny.fr/once-human/specialisations')
+    return await fetch('https://api.thoanny.fr/once-human/specialisations.php')
         .then((res) => res.json())
         .then((data) => data.specialisations.map((spec) => ({ ...spec, favorite: 0 })));
 };
 
 const getMembers = async () => {
-    return await fetch('https://api.thoanny.fr/once-human/ruche')
+    return await fetch('https://api.thoanny.fr/once-human/ruche.php')
         .then((res) => res.json())
         .then((data) =>
             data.members
